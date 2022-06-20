@@ -2,19 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * @author Aung Kyaw Oo
  */
-class User extends Authenticatable
+class Post extends Model
 {
-    use Notifiable;
     use SoftDeletes;
-
     /**
      * Perform the actual delete query on this model instance.
      *
@@ -26,33 +23,15 @@ class User extends Authenticatable
         if ($user = Auth::user()) {
             $columns['deleted_user_id'] = $user->id;
         }
+
         $this->update($columns);
     }
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'profile', 'type', 'phone', 'address', 'dob', 'create_user_id', 'updated_user_id'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
+        'title', 'description', 'status', 'create_user_id', 'updated_user_id', 'deleted_user_id'
     ];
 }
