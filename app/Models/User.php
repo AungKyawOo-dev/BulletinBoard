@@ -2,55 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\HasApiTokens;
 
-/**
- * @author Aung Kyaw Oo
- */
 class User extends Authenticatable
 {
-    use Notifiable;
-    use SoftDeletes;
-
-    /**
-     * Perform the actual delete query on this model instance.
-     *
-     * @return void
-     */
-    protected function runSoftDelete()
-    {
-        $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
-        if ($user = Auth::user()) {
-            $columns['deleted_user_id'] = $user->id;
-        }
-        $this->update($columns);
-    }
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'profile', 'type', 'phone', 'address', 'dob', 'create_user_id', 'updated_user_id'
+        'name',
+        'email',
+        'password',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
