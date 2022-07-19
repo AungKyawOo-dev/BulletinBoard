@@ -16,18 +16,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/download', function () {
-    $headers = [
-        'Content-Type' => 'application/zip',
-        'File-name' => 'robots.txt'
-    ];
-    $file = public_path() . '/aa.txt';
-    return response()->download($file, $headers)->deleteFileAfterSend(true);
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-require __DIR__ . '/auth.php';
